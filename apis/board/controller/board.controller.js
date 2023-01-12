@@ -4,6 +4,7 @@ const showAll = (req,res)=>{
     req.query.limit = req.query.limit || 10;
     const limit = parseInt(req.query.limit,10);
     if(Number.isNaN(limit))return res.status(400).end();
+    
     models.Board.findAll({limit})
         .then(board=>{
             if(board.length===0)return res.status(204).end();

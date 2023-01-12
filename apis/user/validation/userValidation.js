@@ -1,6 +1,6 @@
 const {body,validationResult} =require('express-validator');
 
-const userDataCheck = [
+const userValidation = [
     body('name').notEmpty(),
     body('userId').isEmail().notEmpty(),
     body('userPwd').isLength({min:8,max:20}),
@@ -13,4 +13,4 @@ const userDataCheck = [
     }
 ];
 
-module.exports = {userDataCheck};
+module.exports = {userValidation};
