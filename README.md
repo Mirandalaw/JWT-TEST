@@ -46,3 +46,47 @@
       찾으려는 목록이 없을시 404 반환.
  
  [board]
+
+  1. 게시판 목록 조회 => GET /board/
+    
+    SUCCESS
+      게시판 객체 반환
+    
+    ERROR 
+      목록이 없을 시 204 반환.
+ 
+ 2. 특정 게시판 목록 조회 => GET /board/:id
+    
+    SUCCESS
+      게시판 객체 반환
+    
+    ERROR
+      찾으려는 목록이 없을시 404 반환.
+ 
+ 3. 게시판 작성 => POST /board
+     
+    SUCCESS
+    
+    ERROR
+      
+
+    추가 예정 : 
+ 
+ 4. 게시판 삭제 => DELETE /board/:id
+     
+    SUCCESS
+      게시판 객체 반환
+    
+    ERROR
+      삭제하려는 목록이 없을시 404 반환.
+ 
+ 5. 게시판 수정 => PUT/board/:id
+    
+    SUCCESS
+      게시판 객체 반환
+    
+    ERROR
+      찾으려는 목록이 없을시 404 반환.
+
+
+3. express-validator를 통해 유효성 검사 및 리팩토링

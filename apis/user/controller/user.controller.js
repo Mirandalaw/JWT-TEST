@@ -2,7 +2,7 @@ const models = require('../models/index');
 
 
 const showAll  = (req,res)=>{
-    req.query.limit = req.query.linit || 10;
+    req.query.limit = req.query.limit || 10;
     const limit = parseInt(req.query.limit,10);
     if(Number.isNaN(limit)) return res.status(400).end();
     models.User.findAll({limit})
@@ -14,6 +14,7 @@ const showAll  = (req,res)=>{
 
 const showOne = (req,res)=>{
     const id = parseInt(req.params.id,10);
+    if(Number.isNaN(id))return res.status(400).end();
     models.User.findOne({where:{id}})
         .then(user =>{
             if(!user)return res.status(404).end();
@@ -25,6 +26,7 @@ const create = (req,res)=>{
     const name = req.body.name;
     const userId = req.body.userId;
     const userPwd = req.body.userPwd;
+    // models.User.findOrCreate({where:{userId}}) 리펙토링 하기
     models.User.findOne({where: {userId}})
         .then(user=>{
             if(user.userId===userId) return res.status(404).json("ID가 중복입니다.");
