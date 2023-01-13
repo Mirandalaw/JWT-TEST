@@ -29,7 +29,7 @@
 
     추가 예정 : 
  
- 4. 회원 삭제 => DELETE /user/:id/
+ 4. 회원 삭제 => DELETE /user/:id
      
     SUCCESS
       유저 객체 반환
@@ -37,7 +37,7 @@
     ERROR
       삭제하려는 목록이 없을시 404 반환.
  
- 5. 회원 수정 => PUT/user/:id/
+ 5. 회원 수정 => PUT/user/:id
     
     SUCCESS
       유저 객체 반환
@@ -47,7 +47,7 @@
  
  [board]
 
-  1. 게시판 목록 조회 => GET /board/
+  1. 게시판 목록 조회 => GET /board
     
     SUCCESS
       게시판 객체 반환
@@ -55,7 +55,7 @@
     ERROR 
       목록이 없을 시 204 반환.
  
- 2. 특정 게시판 목록 조회 => GET /board/:id/
+ 2. 특정 게시판 목록 조회 => GET /board/:id
     
     SUCCESS
       게시판 객체 반환
