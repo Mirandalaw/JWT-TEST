@@ -6,8 +6,8 @@ const validation = require('../validation/boardValidation');
 
 router.get('/',controller.showAll);
 router.get('/:id',controller.showOne);
-router.post('/',validation.boardDataCheck,controller.create);
-router.put('/:id',validation.boardDataCheck,controller.update);
-router.delete('/:id',controller.destroy);
+router.post('/',validation.boardValidation,controller.createBoard);
+router.put('/:id',validation.boardValidation,controller.updateBoard);
+router.delete('/:id',controller.destroyBoard);
 
 module.exports = router;

@@ -1,70 +1,76 @@
-const models = require('../models/index');
+const boardService = require("../services/board.services");
 
-const showAll = (req,res)=>{
+const showAll = async (req,res)=>{
     req.query.limit = req.query.limit || 10;
     const limit = parseInt(req.query.limit,10);
     if(Number.isNaN(limit))return res.status(400).end();
     
-    models.Board.findAll({limit})
-        .then(board=>{
-            if(board.length===0)return res.status(204).end();
-            res.json(board);
-        })
+    try{
+        const board = await boardService.getAllBorad(limit);
+        if(board === null){
+            throw {message : "Not Found Borad"};
+        }
+        return res.status(200).json({status:200,data : board, message : "Successfully find all borad"});
+    }catch(err){
+        return res.status(400).json({status:400,message: err.message});
+    }
 };
 
-const showOne = (req,res)=>{
+const showOne = async (req,res)=>{
     const id = parseInt(req.params.id,10);
     if(Number.isNaN(id))return res.status(400).end();
-    models.Board.findOne({where:{id}})
-        .then(board=>{
-            if(!board) return res.status(404).end();
-            res.json(board);
-        })
-}
-const create = (req,res)=>{
+    try{
+        const board = await boardService.getBoard(id);
+        if(board ===null){
+            throw {message : "찾으려는 정보가 없습니다."};
+        }
+        return res.status(200).json({status : 200, data: board, message : "Successfully find a board"});
+    }catch(err){
+        return res.status(400).json({status : 400, message : err.message});
+    }
+};
+const createBoard = async(req,res)=>{
     const title = req.body.title;
     const content = req.body.content;
     const userId = req.body.userId;
 
-    models.Board.create({title,content,userId})
-        .then(board=>{
-            return res.status(201).json(board);
-        })
-        .catch(err=>{
-            console.log(err);
-        })
+    try{
+        const board = await boardService.createBoard(title,content,userId);
+        return res.status(201).json({status : 201, data: board, message : "Successfully create a board"});
+    }catch(err){
+        return res.status(400).json({status : 400, message : err.message});
+    }
 }
-const update = (req,res)=>{
+const updateBoard = async (req,res)=>{
     const id = parseInt(req.params.id,10);
     if(Number.isNaN(id))return res.status(400).end();
     const title = req.body.title;
     const content = req.body.content;
     const userId = req.body.userId;
 
-    models.Board.findOne({where:{id}})
-        .then(board=>{
-            board.title = title;
-            board.content = content;
-            board.userId = userId;
-
-            board.save()
-                .then(()=>{
-                    res.json(board);
-                })
-                .catch(err=>{
-                    console.log(err);
-                })
-        })
+    try{
+        const board = await boardService.updateBoard(id,title,content,userId);
+        if(board ===null){
+            throw {message : "Not Found"};
+        }
+        return res.status(201).json({status : 201, data : board, message : "Successfully update board!!"});
+    }catch(err){
+        return res.status(400).json({status : 400, message : err.message});
+    }
 }
-const destroy = (req,res)=>{
+const destroyBoard = async(req,res)=>{
     const id = parseInt(req.params.id,10);
     if(Number.isNaN(id))return res.status(400).end();
     
-    models.Board.destroy({where:{id}})
-        .then(board=>{
-            if(!board) return res.status(404).end();
-            return res.status(204).end();
-        })
+    try{
+        const board = await boardService.destroyBoard(id);
+        if(board ===0){
+            throw {message : "User Not Found"};
+        }
+        return res.status(201).json({status : 201, message : "Successfully destroy board!!"});
+    }catch(err){
+        return res.status(400).json({status : 400, message : err.message});
+    }
 }
 
-module.exports = {showAll,showOne,create,update,destroy};
+module.exports = {showAll,showOne,createBoard,updateBoard,destroyBoard};

@@ -1,4 +1,3 @@
-const models = require('../models/index');
 const userService  = require('../services/user.services');
 
 const showAll  = async(req,res)=>{
@@ -25,7 +24,6 @@ const showOne = async (req,res)=>{
     
     try{
         const user = await userService.getUser(id);
-        console.log(user);
         if(user===null){
             throw {message : "찾으려는 정보가 없습니다."};
         }
@@ -60,7 +58,6 @@ const update = async (req,res)=>{
         if(user ===null){
             throw {message : "Not Found"};
         }
-        console.log(user);
         return res.status(201).json({status : 201 , data : user , message : "Successfully Update User!!"});
     }catch(err){
         return res.status(400).json({status : 400, message :err.message});

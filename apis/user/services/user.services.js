@@ -14,7 +14,7 @@ const getUser = async(id) =>{
         const users = await models.User.findOne({where:{id}});
         return users;
     }catch(err){
-        throw Error("Error ")
+        throw Error("Error while finding user!! ");
     }
 }
 const createUser = async (name,userId,userPwd) =>{

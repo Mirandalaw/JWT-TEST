@@ -1,6 +1,6 @@
 const {body,validationResult} = require('express-validator');
 
-const boardDataCheck = [
+const boardValidation = [
     body("title").isString().notEmpty(),
     body("content").isLength({min:0,max: 500}),
     body('userId').isEmail().notEmpty(),
@@ -13,4 +13,4 @@ const boardDataCheck = [
     }
 ];
 
-module.exports = {boardDataCheck};
+module.exports = {boardValidation};
