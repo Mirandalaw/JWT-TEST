@@ -47,7 +47,7 @@
  
  [board]
 
-  1. 게시판 목록 조회 => GET /board/
+  1. 게시판 목록 조회 => GET /board
     
     SUCCESS
       게시판 객체 반환
