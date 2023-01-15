@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>{
-    return sequelize.define('user',{
+    const Users = sequelize.define('user',{
         name :{
             type: DataTypes.STRING,
             allowNull : false,
@@ -14,4 +14,7 @@ module.exports = (sequelize, DataTypes) =>{
             allowNull : false,
         }
     })
+    Users.associate = models =>{
+        Users.haseOne(models.Board , {foreignKey : "userId",sourceKey : "userId"});
+    }
 }

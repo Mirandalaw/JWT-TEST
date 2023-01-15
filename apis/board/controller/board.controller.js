@@ -6,7 +6,7 @@ const showAll = async (req,res)=>{
     if(Number.isNaN(limit))return res.status(400).end();
     
     try{
-        const board = await boardService.getAllBorad(limit);
+        const board = await boardService.getAllBoard(limit);
         if(board === null){
             throw {message : "Not Found Borad"};
         }

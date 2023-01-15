@@ -1,5 +1,5 @@
 module.exports = (sequelize,DataTypes)=>{
-    return sequelize.define('Board',{
+    const Board =  sequelize.define('Board',{
         title : {
             type : DataTypes.STRING,
             allowNull : false,    
@@ -14,4 +14,8 @@ module.exports = (sequelize,DataTypes)=>{
         }
         
     })
+    Board.associate = models =>{
+        Board.belongTo(models.Users, {foreignKey : "userId",sourceKey : "userId"});
+    }
+    return Board;
 }

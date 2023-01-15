@@ -54,4 +54,4 @@ const destroyBoard = async(id) =>{
         throw Error("Error while destroying Board");
     }
 }
-module.exports = {getAllBorad,getBoard,createBoard,updateBoard,destroyBoard};
+module.exports = {getAllBoard,getBoard,createBoard,updateBoard,destroyBoard};
