@@ -1,10 +1,11 @@
 const models = require('../models/index');
+const jwt = require('../modules/jwt');
 
-const getAllUser = async(limit) =>{
-    try{
+const getAllUser = async (limit) => {
+    try {
         const users = await models.User.findAll({limit});
         return users;
-    }catch(err){
+    } catch (err) {
         throw Error('Error while Finding All User');
     }
 }
@@ -54,4 +55,19 @@ const destroyUser = async(id) =>{
         throw Error("Error while destroying User");
     }
 }
-module.exports = {getAllUser,getUser,createUser,updateUser,destroyUser};
+
+const loginUser = async(userId,userPwd)=>{
+    try {
+        const users = await models.User.findOne({where :{userId}});
+        if(users.userId===userId){
+            if(users.userPwd==userPwd){
+                return users;
+            }
+        }
+        return false;
+    } catch (error) {
+        console.log(err);
+        throw Error("Error while login");
+    }
+}
+module.exports = {getAllUser,getUser,createUser,updateUser,destroyUser,loginUser};

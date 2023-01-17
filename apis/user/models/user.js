@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) =>{
-    const Users = sequelize.define('user',{
+    const user = sequelize.define('user',{
         name :{
             type: DataTypes.STRING,
             allowNull : false,
@@ -12,9 +12,18 @@ module.exports = (sequelize, DataTypes) =>{
         userPwd : {
             type : DataTypes.STRING,
             allowNull : false,
+        },
+        refreshToken : {
+            type : DataTypes.STRING,
+            allowNull : true,
+            validate : {
+                notEmpty : true,
+            }
         }
     })
-    Users.associate = models =>{
-        Users.haseOne(models.Board , {foreignKey : "userId",sourceKey : "userId"});
+
+    user.associate = models =>{
+        user.hasOne(models.Board, {foreignKey : "userId",sourceKey : "userId"});
     }
+    return user;
 }

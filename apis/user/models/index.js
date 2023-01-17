@@ -5,14 +5,8 @@ const sequelize = new Sequelize(process.env.DATABASE, process.env.DB_USERNAME, p
     host: process.env.HOST,
     dialect: process.env.dialect,
     logging : false,
-    // operatorsAliases: false,
 });
 
-// sequelize.authenticate().then(() => {
-//     console.log('Connection has been established successfully.');
-//  }).catch((error) => {
-//     console.error('Unable to connect to the database: ', error);
-//  });
 const db ={};
 
 db.Sequelize = Sequelize;

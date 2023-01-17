@@ -1,16 +1,16 @@
 const userService  = require('../services/user.services');
+const jwt = require('../modules/jwt');
+const models = require('../models/index');
 
-const showAll  = async(req,res)=>{
+const showAll  = async (req,res)=>{
     
     req.query.limit = req.query.limit || 10;
     const limit = parseInt(req.query.limit,10);
     if(Number.isNaN(limit)) return res.status(400).end();
     
     try{
-        const user = await userService.getAllUser(limit);
-        if(user === null){
-            throw {message : "Not Found"};
-        }
+        const user =  await userService.getAllUser();
+        if(user.length===0) return res.status(404).json({status:404,message : "Not Found"});
         return res.status(200).json({status :200 , data : user , message : "Successfully Get All Users"});
     }catch(err){
         return res.status(400).json({status: 400, message : err.message});
@@ -40,7 +40,7 @@ const createUser = async(req,res)=>{
     const userPwd = req.body.userPwd;
     try{
         const user = await userService.createUser(name,userId,userPwd);
-        return res.status(201).json({status: 201, data :user ,message : "Successfully Create User"});
+        return res.status(201).json({status: 201, data :user ,message : "회원가입을 완료했습니다."});
     }catch(err){
         return res.status(400).json({status:400, message : err.message});
     }
@@ -95,4 +95,27 @@ const destroy = async (req,res)=>{
         return res.status(400).json({status : 400, message : err.message});
     }
 }
-module.exports = {showAll,showOne,createUser, update, destroy};
+
+const signIn = async (req,res)=>{
+    const {userId,userPwd} =req.body;
+    const userItem = await models.User.findOne({where:{userId}});
+    if(userItem != null) {
+        if(userItem.userPwd == userPwd) {
+            try {
+                const AccessToken = await jwt.sign(userItem);
+                const RefreshToken = await jwt.refresh();
+                userItem.refreshToken = RefreshToken.toString();
+                userItem.save();
+                return res.status(200).json({
+                    AccessToken:AccessToken,
+                    RefreshToken :RefreshToken
+                })
+            } catch (error) {
+                console.log(error);
+                res.status(401).json({success :false , message : 'token sign fail'});
+            }
+        }
+    }
+    else throw new Error('login failed!');
+}
+module.exports = {showAll,showOne,createUser, update, destroy,signIn};

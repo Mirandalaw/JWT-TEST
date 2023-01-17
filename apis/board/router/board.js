@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const models = require('../models/index')
 const controller = require('../controller/board.controller');
 const validation = require('../validation/boardValidation');
 
