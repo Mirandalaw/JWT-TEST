@@ -101,6 +101,7 @@ const signIn = async (req,res)=>{
         const {userId,userPwd} =req.body;
         const token = await userService.loginUser(userId,userPwd);
         res.cookie('token',token);
+        res.cookie('userId',userId);
         return res.status(200).end();
         
     } catch (error) {
@@ -113,8 +114,14 @@ const check = async(req,res) =>{
     console.log(req.userId);
     return res.send(200).end();
 }
-const logout = async(req,res)=>{
-    
+const userLogout =  async (req,res)=>{
+    const userId = req.cookies.userId;
+    const user = await models.User.findOne({where:{userId}});
+    user.refreshToken = null;
+    user.save();
+    res.clearCookie('token');
+    res.clearCookie('userId');
+    return res.send('로그아웃 했습니다.');
 }
 
-module.exports = {showAll,showOne,createUser, update, destroy,signIn,check};
+module.exports = {showAll,showOne,createUser, update, destroy,signIn,check,userLogout};

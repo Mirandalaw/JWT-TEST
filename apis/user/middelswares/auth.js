@@ -7,31 +7,27 @@ const TOKEN_INVALID = -2;
 
 const authUtil = {
     checkToken : async (req,res,next) =>{
-        const userId = req.params.userId;
+        const userId = req.cookies.userId;
         const {token} = req.cookies.token;
         const accessToken = token;
         const findUser = await models.User.findOne({where:{userId}});
         const refreshToken = findUser.refreshToken;
         
         if(!accessToken&&!refreshToken){
-            return res.status(404).json({message : "토큰이 없습니다."});
+            return res.status(404).json({message : "로그인이 필요합니다."});
         }
-        const user = await jwt.verify(accessToken);
-        const refresh = await jwt.refreshVerify(refreshToken);
-        if(user === TOKEN_EXPIRED){
-            if(refresh!==TOKEN_EXPIRED&&refresh!==TOKEN_INVALID) {
-                let accToken = jwt.sign(findUser);
+        let user = await jwt.verify(accessToken);
+        let refresh = await jwt.refreshVerify(refreshToken);
+        if(refresh!==TOKEN_EXPIRED&&refresh!==TOKEN_INVALID){ //refresh토큰이 있다면
+            if(user===TOKEN_EXPIRED ||user===TOKEN_INVALID){
+                let accToken = await jwt.sign(findUser);
                 res.cookie('token',accToken);
-                res.redirect('/check/complete');
             }
         }
-        if(user!==TOKEN_INVALID&&user!==TOKEN_EXPIRED){
-            if(refresh===TOKEN_EXPIRED||refresh===TOKEN_INVALID){
-                let refToken = jwt.createRefreshToken();
-                findUser.refreshToken=refToken;
-                findUser.save();
-                res.redirect('/check/complete');
-            }
+        else {
+            let refToken = await jwt.createRefreshToken();
+            findUser.refreshToken=refToken;
+            findUser.save();
         }
         if(user.id=== undefined){
             return res.status(400).json({message : "회원이 없슈"});
