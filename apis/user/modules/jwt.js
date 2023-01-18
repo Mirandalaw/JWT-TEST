@@ -1,5 +1,6 @@
 const randToken = require('rand-token');
 const jwt = require('jsonwebtoken');
+const { decode } = require('jsonwebtoken');
 const secretKey = require('../../../config/secretKey').secretKey;
 const options = require('../../../config/secretKey').options;
 const TOKEN_EXPIRED = -3;
@@ -17,7 +18,7 @@ const sign = async (user) => {
     return result;
 };
 //refresh 토큰 생성
-const refresh = async () =>{
+const createRefreshToken = async () =>{
     const result = 
         jwt.sign({},secretKey,{
             algorithm : 'HS256',
@@ -27,7 +28,23 @@ const refresh = async () =>{
 };
 //refreshtoken 검증
 const refreshVerify = async (token,userId) =>{
-    
+    let decoded;
+    try {
+        decoded = jwt.verify(token,secretKey);
+        return decoded;
+    } catch (error) {
+        if(error.message === 'jwt expired'){
+            console.log('expired RefreshToken!');
+            return TOKEN_EXPIRED;
+        }else if(error.message ==='invalid token'){
+            console.log('invaild token');
+            return TOKEN_INVALID;
+        }else {
+            console.log('invalid token');
+            return TOKEN_INVALID;
+        }
+        return decoded;
+    }
 }
 const verify = async(token) =>{
     let decoded;
@@ -49,4 +66,4 @@ const verify = async(token) =>{
     }
 }
 
-module.exports = {sign,verify,refresh};
+module.exports = {sign,verify,createRefreshToken,refreshVerify};

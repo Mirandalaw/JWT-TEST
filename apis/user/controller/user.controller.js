@@ -97,25 +97,24 @@ const destroy = async (req,res)=>{
 }
 
 const signIn = async (req,res)=>{
-    const {userId,userPwd} =req.body;
-    const userItem = await models.User.findOne({where:{userId}});
-    if(userItem != null) {
-        if(userItem.userPwd == userPwd) {
-            try {
-                const AccessToken = await jwt.sign(userItem);
-                const RefreshToken = await jwt.refresh();
-                userItem.refreshToken = RefreshToken.toString();
-                userItem.save();
-                return res.status(200).json({
-                    AccessToken:AccessToken,
-                    RefreshToken :RefreshToken
-                })
-            } catch (error) {
-                console.log(error);
-                res.status(401).json({success :false , message : 'token sign fail'});
-            }
-        }
+    try {
+        const {userId,userPwd} =req.body;
+        const token = await userService.loginUser(userId,userPwd);
+        res.cookie('token',token);
+        return res.status(200).end();
+        
+    } catch (error) {
+        console.log(error);
+        res.status(401).json({success :false , message : 'token sign fail'});
     }
-    else throw new Error('login failed!');
 }
-module.exports = {showAll,showOne,createUser, update, destroy,signIn};
+
+const check = async(req,res) =>{
+    console.log(req.userId);
+    return res.send(200).end();
+}
+const logout = async(req,res)=>{
+    
+}
+
+module.exports = {showAll,showOne,createUser, update, destroy,signIn,check};

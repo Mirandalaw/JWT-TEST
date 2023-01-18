@@ -58,13 +58,17 @@ const destroyUser = async(id) =>{
 
 const loginUser = async(userId,userPwd)=>{
     try {
-        const users = await models.User.findOne({where :{userId}});
-        if(users.userId===userId){
-            if(users.userPwd==userPwd){
-                return users;
+        const user = await models.User.findOne({where :{userId}});
+        if(user.userId===userId){
+            if(user.userPwd==userPwd){
+                const token = await jwt.sign(user);
+                const refreshToken = await jwt.createRefreshToken();
+                user.refreshToken = refreshToken;
+                user.save();
+
+                return token;
             }
         }
-        return false;
     } catch (error) {
         console.log(err);
         throw Error("Error while login");
