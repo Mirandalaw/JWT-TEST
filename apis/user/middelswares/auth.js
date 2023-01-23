@@ -1,6 +1,5 @@
 const jwt = require('../modules/jwt');
 const models = require('../models/index');
-const service = require('../services/user.services');
 
 const TOKEN_EXPIRED = -3;
 const TOKEN_INVALID = -2;

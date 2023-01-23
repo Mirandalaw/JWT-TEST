@@ -15,7 +15,5 @@ router.post('/login',controller.signIn);
 router.put('/:id',authUtil,validation.userValidation,controller.update);
 router.delete('/:id',controller.destroy);
 router.post('/logout',controller.userLogout);
-router.get('/logout',(req,res)=>{
-    res.send('logout되었습니다.')
-})
+
 module.exports = router;
